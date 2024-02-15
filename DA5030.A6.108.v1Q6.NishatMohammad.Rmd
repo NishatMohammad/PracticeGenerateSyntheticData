@@ -1,0 +1,38 @@
+---
+title: "Validate Data"
+author: "Dr. Nishat Mohammad"
+date: "01/19/2024"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Validate game schedule 
+Load game schedule from csv file and validate it
+```{r Q6_validate_data}
+### Question 6. ####
+#In a separate R program, load the CSV and validate the schedule: is the correct number of games given the number of teams? are ties resolved? if the overtime flag is TRUE, is the goal differential exactly 1?
+#### Answers ####
+# Load the new csv for validation
+valdation_df <- read.csv("gameschedule.csv", header = T)
+valdation_df
+# select some rows randomly
+set.seed(786)
+random_selected_rows <- sample(1:nrow(valdation_df), 6, replace = FALSE)
+
+# Look at the data again ans comment
+valdation_df[random_selected_rows,]
+
+for (row in 1:nrow(valdation_df[random_selected_rows,])){
+  if(valdation_df[random_selected_rows,]$ot[row] =="TRUE"){
+    if (isTRUE(valdation_df[random_selected_rows,]$home.team.goals[row] - valdation_df[random_selected_rows,]$away.team.goals[row] == 1)){
+      print("Yes, the goal difference is 1 for the tie games." )
+    }
+  }
+}
+
+```
+The number of games is correct since we sampled only 6 and the serial number is correct as well.  
+The ties have been resolved and those that were TRUE have and extra score assigned to one of the teams in the tie game. 
+For tie games, is the goal difference 1? Yes

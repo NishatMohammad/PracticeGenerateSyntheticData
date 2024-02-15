@@ -1,0 +1,199 @@
+---
+title: "Team Standings Report"
+author: Nishat Mohammad
+date: 01/19/2024
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+---
+
+## Report 1 on Team Standings
+```{r Q7_Team_Standing}
+# Pull code from my .R file I made earlier for this project
+source("DA5030.A6.108.v1.Nishat.Mohammad.R", echo=TRUE)
+
+### Question 7. ####
+#Create an R Notebook and build a “report” that lists the teams and then produces the “standings”, i.e., a table that lists the teams in order of points. Award 2 points to the winner, 1 for a team that loses in overtime, and 0 for a team that lost in regulation.
+#### Answers ####
+
+# Create a df for the table 
+points_table <- as.data.frame(matrix(ncol= 5, nrow=0))
+colnames(points_table) <- c("game_num", "winning_team", "Winner_point", "losing_team","losser_point")
+
+my_teams_df
+# Get the points in th points table
+for (row in 1: nrow(my_teams_df)){
+  points_table[row,1] <- row
+  if (my_teams_df$ot[row]==FALSE){
+      if (my_teams_df$home.team.goals[row] > my_teams_df$away.team.goals[row]){
+        points_table[row,2] <- my_teams_df$home.team[row]
+        points_table[row,3] <- 2
+        points_table[row,4] <- my_teams_df$away.team[row]
+        points_table[row,5] <- 0
+      }else {
+        points_table[row,2] <- my_teams_df$away.team[row]
+        points_table[row,3] <- 2
+        points_table[row,4] <- my_teams_df$home.team[row]
+        points_table[row,5] <- 0
+      }
+  } else{
+    if (my_teams_df$home.team.goals[row] > my_teams_df$away.team.goals[row]){
+        points_table[row,2] <- my_teams_df$home.team[row]
+        points_table[row,3] <- 2
+        points_table[row,4] <- my_teams_df$away.team[row]
+        points_table[row,5] <- 1
+      }else {
+        points_table[row,2] <- my_teams_df$away.team[row]
+        points_table[row,3] <- 2
+        points_table[row,4] <- my_teams_df$home.team[row]
+        points_table[row,5] <- 1
+      }
+    } 
+}
+points_table
+# Get the team names
+team_names <- unique(c(unique(points_table$winning_team), unique(points_table$losing_team)))
+
+# Create the Standings table
+standings_table <- as.data.frame(matrix(ncol= 2, nrow=length(team_names)))
+colnames(standings_table) <- c("team_name", "total_points")
+
+# Add the team names column
+standings_table[1:(length(team_names)),1]<- team_names
+
+for (row in 1:nrow(standings_table)){
+  total_win_point<-points_table$Winner_point[points_table$winning_team==standings_table$team_name[row]]
+  total_loss_point<- points_table$losser_point[points_table$losing_team==standings_table$team_name[row]]
+  total_point <- sum(total_loss_point,total_win_point)
+  standings_table$total_points[row] <- total_point
+}
+standings_table
+tot_points<- standings_table$total_points
+
+```
+### Team List
+The Team List is:  
+`r paste0('"',hm_team,'"')`
+
+### Standings
+The standings for the respective teams are:  
+`r paste(format(round(tot_points,0), big.mark = ",", scientific = FALSE))`  
+View all details in the tables above.  
+
+
+## Report 2 on Team Standings
+```{r Q8_Report2}
+### Question 8. ####
+#Add another section to the R Notebook that creates a different table based on the winner getting 3 points, the overtime winner gets 2 points, and the loser in overtime gets 1 point.
+#### Answers ####
+# Create a df for the second table 
+points_table2 <- as.data.frame(matrix(ncol= 5, nrow=0))
+colnames(points_table2) <- c("game_num", "winning_team", "Winner_point", "losing_team","losser_point")
+
+# Get the points in th points table2
+for (row in 1: (length(my_teams_df$home.team.goals))){
+  points_table2[row,1] <- row
+  if (my_teams_df$ot[row]==FALSE){
+      if (my_teams_df$home.team.goals[row] > my_teams_df$away.team.goals[row]){
+        points_table2[row,2] <- my_teams_df$home.team[row]
+        
+        points_table2[row,3] <- 3
+        points_table2[row,4] <- my_teams_df$away.team[row]
+        points_table2[row,5] <- 0
+      }else {
+        points_table2[row,2] <- my_teams_df$away.team[row]
+        points_table2[row,3] <- 3
+        points_table2[row,4] <- my_teams_df$home.team[row]
+        points_table2[row,5] <- 0
+      }
+  } else{
+    if (my_teams_df$home.team.goals[row] > my_teams_df$away.team.goals[row]){
+        points_table2[row,2] <- my_teams_df$home.team[row]
+        points_table2[row,3] <- 2
+        points_table2[row,4] <- my_teams_df$away.team[row]
+        points_table2[row,5] <- 1
+      }else {
+        points_table2[row,2] <- my_teams_df$away.team[row]
+        points_table2[row,3] <- 2
+        points_table2[row,4] <- my_teams_df$home.team[row]
+        points_table2[row,5] <- 1
+      }
+    } 
+}
+points_table2
+
+# Get the team names
+team_names2 <- unique(c(unique(points_table2$winning_team), unique(points_table2$losing_team)))
+
+# Create the Standings table
+standings_table2 <- as.data.frame(matrix(ncol= 2, nrow=length(team_names2)))
+colnames(standings_table2) <- c("team_name", "total_points")
+
+# Add the team names column
+standings_table2[1:(length(team_names2)),1]<- team_names2
+
+# Get the total score and add to the second standings table
+for (row in 1:nrow(standings_table2)){
+  total_win_point2<-points_table2$Winner_point[points_table2$winning_team==standings_table2$team_name[row]]
+  total_loss_point2<- points_table2$losser_point[points_table2$losing_team==standings_table2$team_name[row]]
+  total_point2 <- sum(total_loss_point2,total_win_point2)
+  standings_table2$total_points[row] <- total_point2
+}
+standings_table2
+tot_points2 <- standings_table2$total_points
+
+```
+### Team List
+The team list remains the same as in report 1:  
+`r paste0('"',hm_team,'"')`  
+
+
+### Standings  
+The Standings have now changed based of winner is regular time getting 3 points and 0 for loosers, winners in over time get 2 points while loosers in over time get 1. Please view the standings for the respective teams:  
+
+`r paste(format(round(tot_points2,0), big.mark = ",", scientific = FALSE))`  
+
+View all details in the tables above.  
+
+## Analysis of Standings Report 1 and 2
+```{r Q9_Report analysis}
+# Bar plots for the reports
+# Report 1
+colors <- c("red", "orange", "yellow", "green")
+pnts <- c(standings_table$total_points)
+name_teams <- c(standings_table$team_name)
+
+# Create a bar plot 
+barplot(height = pnts, width = 2, space = 1, names.arg = name_teams,
+        main = "Bar Plot of Standings Report 1",
+        xlab = "Teams",
+        ylab = "Points",
+        col = colors,
+        border = "blue",
+        ylim = c(0, 20) )
+
+
+# Report 2
+pnts2 <- c(standings_table2$total_points)
+name_teams2 <- c(standings_table2$team_name)
+
+# Create a bar plot
+barplot(height = pnts2, width = 2, space = 1, names.arg = name_teams2,
+        main = "Bar Plot of Standings Report 2",
+        xlab = "Teams",
+        ylab = "Points",
+        col = colors,
+        border = "blue",
+        ylim = c(0, 20) )
+```
+
+### Bar plots for Standings
+The Bar plots above visualize the two reports with Arctic Avalanche having the highest points and Glacial Guardians having the lowest points in both reports. Over all both reports are supportive of each others findings. 
+
+The points scored by the teams in Report 1 are `r pnts` for `r name_teams` respectively.  
+The points scored by the teams in Report 2 are `r pnts2` for `r name_teams2` respectively.  
+
