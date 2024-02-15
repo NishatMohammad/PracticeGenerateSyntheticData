@@ -1,0 +1,13 @@
+"home.team","away.team","home.team.goals","away.team.goals","ot"
+"Arctic Avalanche","Frostbite Phantoms",7,1,FALSE
+"Frostbite Phantoms","Polar Pioneers",2,0,FALSE
+"Polar Pioneers","Glacial Guardians",4,3,TRUE
+"Glacial Guardians","Arctic Avalanche",3,5,FALSE
+"Arctic Avalanche","Polar Pioneers",4,2,FALSE
+"Frostbite Phantoms","Glacial Guardians",7,1,FALSE
+"Polar Pioneers","Arctic Avalanche",2,1,TRUE
+"Glacial Guardians","Frostbite Phantoms",1,6,FALSE
+"Arctic Avalanche","Glacial Guardians",8,2,FALSE
+"Frostbite Phantoms","Arctic Avalanche",3,6,FALSE
+"Polar Pioneers","Frostbite Phantoms",2,6,FALSE
+"Glacial Guardians","Polar Pioneers",1,7,FALSE
